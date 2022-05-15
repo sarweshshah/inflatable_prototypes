@@ -1,7 +1,6 @@
-int pump = A2;
+int pump = A1;
 
 void setup() {
-  pinMode(pump, OUTPUT);
 }
 
 void loop() {
