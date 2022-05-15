@@ -1,25 +1,36 @@
-#include <HX710B.h>
+#include "HX710B.h"
 
 const int PUMP_PIN = A1;
-const int HX710B_OUT_PIN = A2;
-const int HX710B_SCK_PIN = A3;
+const int DOUT_PIN = A3;
+const int SCLK_PIN = A2;
+
+HX710B pressure_sensor;
 
 void setup() {
-  pinMode(HX710B_SCK_PIN, INPUT);
-
-  Serial.begin(9600);
-  Serial.println("HX7108 Pressure Sensor readings:");
+  Serial.begin(57600);
+  pressure_sensor.begin(DOUT_PIN, SCLK_PIN);
+  pressure_sensor.power_up();
+  pressure_sensor.wait_ready(2000);
 }
 
 void loop() {
-  analogWrite(PUMP_PIN, 255);
+//    analogWrite(PUMP_PIN, 255);
 
-  float sensorOUTPinReading = analogRead(HX710B_OUT_PIN);
-  float sensorSCKPinReading = digitalRead(HX710B_SCK_PIN);
-  // float pressure = (analogRead(pressureSensorPin) * (5.0/1023) / 0.02) + 10;
+  if (pressure_sensor.is_ready()) {
+    Serial.print(pressure_sensor.pascal());
+    Serial.print(" Pa, ");
 
-  Serial.println(sensorOUTPinReading);
-  Serial.println(sensorSCKPinReading);
+    Serial.print(pressure_sensor.atm());
+    Serial.print(" atm, ");
 
-  delay(1000);
+    Serial.print(pressure_sensor.mmHg());
+    Serial.print(" mmHg, ");
+
+    Serial.print(pressure_sensor.psi());
+    Serial.println(" psi");
+  } 
+  else {
+    Serial.println("Pressure sensor not found.");
+  }
+  delay(200);
 }
