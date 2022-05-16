@@ -10,11 +10,15 @@ void setup() {
   Serial.begin(57600);
   pressure_sensor.begin(DOUT_PIN, SCLK_PIN);
   pressure_sensor.power_up();
+
+  // Waiting for 2 secs for the sensor to read the pressure and send signal
   pressure_sensor.wait_ready(2000);
+  Serial.print("HX710B Sensor is ready!");
 }
 
 void loop() {
-//    analogWrite(PUMP_PIN, 255);
+  // Sending half-pulse HIGH signal to the air pump
+    analogWrite(PUMP_PIN, 128);
 
   if (pressure_sensor.is_ready()) {
     Serial.print(pressure_sensor.pascal());
@@ -28,9 +32,9 @@ void loop() {
 
     Serial.print(pressure_sensor.psi());
     Serial.println(" psi");
-  } 
+  }
   else {
     Serial.println("Pressure sensor not found.");
   }
-  delay(200);
+  delay(1000);
 }
