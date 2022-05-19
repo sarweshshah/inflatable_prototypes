@@ -18,7 +18,7 @@ void setup() {
 
 void loop() {
   // Sending half-pulse HIGH signal to the air pump
-    analogWrite(PUMP_PIN, 128);
+  analogWrite(PUMP_PIN, 128);
 
   if (pressure_sensor.is_ready()) {
     Serial.print(pressure_sensor.pascal());

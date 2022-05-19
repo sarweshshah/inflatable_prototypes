@@ -221,8 +221,6 @@ long HX710B::read() {
 
   float HX710B::pascal() {
     float value = (read_average() * RES) * 200 + 500;
-    //    float value = (read_average() * RES) * 20 - 50;
-    //    float value = (read_average() * RES) * 10 - 5;
     return value;
   }
 
