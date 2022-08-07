@@ -4,24 +4,34 @@ const int PUMP_PIN = A0;
 const int VACUUM_PIN = A1;
 const int DOUT_PIN = A3;
 const int SCLK_PIN = A2;
+const int SWT = 5;
 
 HX710B pressure_sensor;
+bool running;
 void printPressureMetrics();
 
 void setup() {
   Serial.begin(2000000);
+  running = true;
 
   // Preparing Pressure Sensor
   pressure_sensor.begin(DOUT_PIN, SCLK_PIN);
   pressure_sensor.power_up();
   pressure_sensor.wait_ready(2000); // Waiting for 2 secs for the sensor to send signal
   // Serial.println("HX710B Sensor is ready!");
+
+  pinMode(SWT, INPUT_PULLUP);
 }
 
 void loop() {
-  analogWrite(PUMP_PIN, 255);
-  analogWrite(VACUUM_PIN, 128);
+  int pump_signal = map(running, 0, 1, 0, 255);
+  analogWrite(PUMP_PIN, pump_signal);
+  analogWrite(VACUUM_PIN, pump_signal);
   printPressureMetrics();
+
+  if (digitalRead(SWT) == 0) {
+    running = !running;
+  }
   delay(200);
 }
 
