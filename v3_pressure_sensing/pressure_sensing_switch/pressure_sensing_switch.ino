@@ -1,7 +1,7 @@
 #include "HX710B.h"
 
-const int PUMP_PIN = A0;
-const int VACUUM_PIN = A1;
+const int PUMP_PIN = A1;
+const int VACUUM_PIN = A0;
 const int DOUT_PIN = A3;
 const int SCLK_PIN = A2;
 const int SWT = 5;
@@ -12,7 +12,7 @@ void printPressureMetrics();
 
 void setup() {
   Serial.begin(2000000);
-  running = true;
+  running = false;
 
   // Preparing Pressure Sensor
   pressure_sensor.begin(DOUT_PIN, SCLK_PIN);
@@ -25,7 +25,7 @@ void setup() {
 
 void loop() {
   int pump_signal = map(running, 0, 1, 0, 255);
-  analogWrite(PUMP_PIN, pump_signal);
+  //  analogWrite(PUMP_PIN, pump_signal);
   analogWrite(VACUUM_PIN, pump_signal);
   printPressureMetrics();
 
@@ -41,10 +41,13 @@ void printPressureMetrics() {
     Serial.print(" kPa, ");
 
     Serial.print(pressure_sensor.atm());
-    Serial.println(" atm, ");
+    Serial.println(" atm");
 
-    // Serial.print(pressure_sensor.mmHg());
-    // Serial.print(pressure_sensor.psi());
+    //    Serial.print(pressure_sensor.mmHg());
+    //    Serial.print(" mm Hg, ");
+    //
+    //    Serial.print(pressure_sensor.psi());
+    //    Serial.println(" psi");
   }
   else {
     Serial.println("Pressure sensor not found.");
